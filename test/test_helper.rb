@@ -442,7 +442,7 @@ class ParanoidForest < ActiveRecord::Base
 
   scope :rainforest, lambda{ where(:rainforest => true) }
 
-  has_many :paranoid_trees, :dependent => :destroy
+  has_many :paranoid_trees, autosave: true, dependent: :destroy
 end
 
 class ParanoidTree < ActiveRecord::Base

@@ -269,6 +269,16 @@ class ParanoidTest < ParanoidBaseTest
     assert ParanoidString.with_deleted.first.deleted?
   end
 
+  def test_has_many_autosave
+    paranoid_forest = ParanoidForest.create!
+    paranoid_tree = paranoid_forest.paranoid_trees.create! name: 'autosave'
+    paranoid_tree.send(:paranoid_value=, ParanoidTree.delete_now_value)
+    paranoid_forest.save!
+    assert_not_nil paranoid_tree.paranoid_value
+    paranoid_tree.reload
+    assert_not_nil paranoid_tree.paranoid_value
+  end
+
   def test_paranoid_destroy_callbacks
     @paranoid_with_callback = ParanoidWithCallback.first
     ParanoidWithCallback.transaction do
